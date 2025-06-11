@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: authorizationServer
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/auth_server_db
+    username: auth_user
+    password: copwor-vaxdo5-megMub
+server:
+  port: 9000
+logging:
+  level:
+    "org.springframework.security": DEBUG
