@@ -6,8 +6,11 @@ spring:
     url: jdbc:postgresql://localhost:5432/auth_server_db
     username: auth_user
     password: copwor-vaxdo5-megMub
+  jackson:
+    default-property-inclusion: non_null
 server:
   port: 9000
 logging:
   level:
     "org.springframework.security": DEBUG
+

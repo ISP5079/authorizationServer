@@ -64,7 +64,8 @@ public class AuthorizationServerConfig {
                         oauth2.jwt(jwt ->
                                 jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/clients").hasAuthority("SCOPE_CLIENTS_CREATE")
+                        .requestMatchers(HttpMethod.POST, "/clients").hasAuthority("SCOPE_ADMIN_AUTH_SERVER")
+                        .requestMatchers(HttpMethod.POST, "/roles").hasAuthority("SCOPE_ADMIN_AUTH_SERVER")
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable) // o ignora solo lo necesario

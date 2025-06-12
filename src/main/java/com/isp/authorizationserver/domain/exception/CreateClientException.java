@@ -1,7 +1,11 @@
 package com.isp.authorizationserver.domain.exception;
 
-public class CreateClientException extends RuntimeException {
-    public CreateClientException(Throwable cause) {
-        super("Error creating client", cause);
+import org.springframework.http.HttpStatus;
+
+public class CreateClientException extends AuthorizationServerException {
+    public static final String ERROR_MESSAGE = "Error creating client";
+
+    public CreateClientException(HttpStatus httpStatus, Throwable cause) {
+        super(httpStatus, ERROR_MESSAGE, cause);
     }
 }

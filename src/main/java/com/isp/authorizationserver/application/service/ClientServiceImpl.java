@@ -3,8 +3,9 @@ package com.isp.authorizationserver.application.service;
 import com.isp.authorizationserver.adapter.dto.in.ClientRq;
 import com.isp.authorizationserver.adapter.dto.out.ClientRp;
 import com.isp.authorizationserver.domain.exception.CreateClientException;
-import com.isp.authorizationserver.domain.port.in.ClientsService;
-import com.isp.authorizationserver.shared.CreateClientSecret;
+import com.isp.authorizationserver.domain.port.in.ClientService;
+import com.isp.authorizationserver.shared.constants.Messages;
+import com.isp.authorizationserver.shared.security.CreateClientSecret;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
@@ -16,12 +17,12 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class ClientsServiceImpl implements ClientsService {
+public class ClientServiceImpl implements ClientService {
 
     private final RegisteredClientRepository clients;
     private final CreateClientSecret clientSecret;
 
-    public ClientsServiceImpl(RegisteredClientRepository clients, CreateClientSecret clientSecret) {
+    public ClientServiceImpl(RegisteredClientRepository clients, CreateClientSecret clientSecret) {
         this.clients = clients;
         this.clientSecret = clientSecret;
     }
@@ -39,10 +40,10 @@ public class ClientsServiceImpl implements ClientsService {
                             .clientSettings(ClientSettings.builder().build())
                             .build();
             clients.save(client);
-        } catch (Exception e) {
-            throw new CreateClientException(e.getCause());
+        } catch (Exception ex) {
+            throw new CreateClientException(HttpStatus.CREATED, ex.getCause());
         }
 
-        return new ClientRp(HttpStatus.CREATED.value(), "Client created");
+        return new ClientRp(HttpStatus.CREATED, Messages.CLIENT_CREATED);
     }
 }

@@ -1,4 +1,4 @@
-package com.isp.authorizationserver.shared;
+package com.isp.authorizationserver.shared.security;
 
 import java.util.Base64;
 import java.util.random.RandomGenerator;

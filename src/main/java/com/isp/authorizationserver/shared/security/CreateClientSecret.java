@@ -1,4 +1,4 @@
-package com.isp.authorizationserver.shared;
+package com.isp.authorizationserver.shared.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
