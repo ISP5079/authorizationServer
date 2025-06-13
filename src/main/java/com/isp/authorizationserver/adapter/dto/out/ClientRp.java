@@ -2,13 +2,10 @@ package com.isp.authorizationserver.adapter.dto.out;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.http.HttpStatus;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
+@SuperBuilder
 public class ClientRp extends GlobalRp {
-
-    public ClientRp(HttpStatus status, String message) {
-        super(status.value(), message);
-    }
 }

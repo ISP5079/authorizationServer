@@ -69,26 +69,29 @@ CREATE TABLE roles (
 );
 
 CREATE TABLE users (
-                       id_user uuid DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
-                       email text NOT NULL UNIQUE,
-                       full_name text NOT NULL,
-                       user_name varchar(25) UNIQUE,
-                       password_hash text NOT NULL,
-                       created_at timestamp with time zone DEFAULT now(),
-                       updated_at timestamp with time zone DEFAULT now(),
-                       is_active boolean DEFAULT true,
-                       last_login timestamp with time zone,
-                       phone varchar(10),
-                       fist_login boolean DEFAULT true
+                       id_user       uuid                     DEFAULT uuid_generate_v4() NOT NULL PRIMARY KEY,
+                       email         text                                                NOT NULL UNIQUE,
+                       full_name     text                                                NOT NULL,
+                       user_name     varchar(25) UNIQUE,
+                       password_hash text                                                NOT NULL,
+                       created_at    timestamp with time zone DEFAULT now(),
+                       updated_at    timestamp with time zone DEFAULT now(),
+                       is_active     boolean                  DEFAULT true,
+                       last_login    timestamp with time zone,
+                       phone         varchar(10),
+                       fist_login    boolean                  DEFAULT true
 );
 
 CREATE TABLE user_role_client (
-                                  id_user uuid NOT NULL references users(id_user),
-                                  id_role integer NOT NULL references roles(id_role),
-                                  client_id varchar NOT NULL references oauth2_registered_client(client_id),
+                                  id_user   uuid    NOT NULL references users (id_user),
+                                  id_role   integer NOT NULL references roles (id_role),
+                                  client_id varchar NOT NULL references oauth2_registered_client (client_id),
                                   PRIMARY KEY (id_user, id_role, client_id)
 );
 
-create index idx_user_role_client_user on user_role_client(id_user);
-create index idx_user_role_client_client on user_role_client(client_id);
+CREATE INDEX idx_user_role_client_user ON user_role_client (id_user);
+CREATE INDEX idx_user_role_client_client ON user_role_client (client_id);
+
+ALTER TABLE roles
+    ALTER COLUMN description TYPE varchar(100)
 

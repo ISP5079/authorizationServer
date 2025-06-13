@@ -11,6 +11,9 @@ public class Messages {
     //RoleService
     public static final String ROLE_CREATED = "Role created";
 
+    //UserService
+    public static final String USER_CREATED = "User created";
+
     //ClientService
     public static final String CLIENT_CREATED = "Client created";
 }

@@ -6,13 +6,10 @@ import com.isp.authorizationserver.domain.port.in.RoleService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/roles")
+@RequestMapping("/role")
 public class RoleController {
     private final RoleService roleService;
 
@@ -24,4 +21,11 @@ public class RoleController {
     public ResponseEntity<RoleRp> createRole(@Valid @RequestBody RoleRq roleRq) {
         return ResponseEntity.status(HttpStatus.CREATED).body(roleService.createRole(roleRq));
     }
+
+    @GetMapping("/{roleName}")
+    public ResponseEntity<RoleRp> getRoleByRoleName(@PathVariable String roleName) {
+        return ResponseEntity.ok().body(roleService.getRoleByRoleName(roleName));
+    }
+
+
 }

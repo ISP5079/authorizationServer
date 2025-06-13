@@ -2,7 +2,7 @@ package com.isp.authorizationserver.application.service;
 
 import com.isp.authorizationserver.adapter.dto.in.ClientRq;
 import com.isp.authorizationserver.adapter.dto.out.ClientRp;
-import com.isp.authorizationserver.domain.exception.CreateClientException;
+import com.isp.authorizationserver.domain.exception.ClientCreateException;
 import com.isp.authorizationserver.domain.port.in.ClientService;
 import com.isp.authorizationserver.shared.constants.Messages;
 import com.isp.authorizationserver.shared.security.CreateClientSecret;
@@ -41,9 +41,11 @@ public class ClientServiceImpl implements ClientService {
                             .build();
             clients.save(client);
         } catch (Exception ex) {
-            throw new CreateClientException(HttpStatus.CREATED, ex.getCause());
+            throw new ClientCreateException(HttpStatus.CREATED, ex.getCause());
         }
 
-        return new ClientRp(HttpStatus.CREATED, Messages.CLIENT_CREATED);
+        return ClientRp.builder()
+                .status(HttpStatus.CONTINUE.value())
+                .message(Messages.CLIENT_CREATED).build();
     }
 }

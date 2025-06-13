@@ -7,7 +7,6 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @SuperBuilder
-public class RoleRp extends GlobalRp{
-    private Integer idRole;
-    private String roleName;
+public class UserRp extends GlobalRp {
+    private String password;
 }
