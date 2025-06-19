@@ -8,5 +8,5 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 public class UserRp extends GlobalRp {
-    private String password;
+    private String fullName;
 }

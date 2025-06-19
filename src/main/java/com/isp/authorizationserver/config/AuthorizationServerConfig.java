@@ -1,5 +1,6 @@
 package com.isp.authorizationserver.config;
 
+import com.isp.authorizationserver.shared.constants.RoleAuthorization;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -64,8 +65,11 @@ public class AuthorizationServerConfig {
                         oauth2.jwt(jwt ->
                                 jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/client").hasAuthority("SCOPE_ADMIN_AUTH_SERVER")
-                        .requestMatchers(HttpMethod.POST, "/role").hasAuthority("SCOPE_ADMIN_AUTH_SERVER")
+                        .requestMatchers(HttpMethod.POST, "/client").hasAuthority(RoleAuthorization.ADMIN_AUTH_SERVER.getScope())
+                        .requestMatchers(HttpMethod.POST, "/role").hasAuthority(RoleAuthorization.ADMIN_AUTH_SERVER.getScope())
+                        .requestMatchers(HttpMethod.GET, "/user/isExist").hasAuthority(RoleAuthorization.APP.getScope())
+                        .requestMatchers(HttpMethod.GET, "/user").hasAuthority(RoleAuthorization.APP.getScope())
+                        .requestMatchers(HttpMethod.POST, "/user").hasAuthority(RoleAuthorization.APP.getScope())
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable) // o ignora solo lo necesario

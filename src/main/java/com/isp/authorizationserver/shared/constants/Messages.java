@@ -12,6 +12,7 @@ public class Messages {
     public static final String ROLE_CREATED = "Role created";
 
     //UserService
+    public static final String USER_AVAILABLE = "User available";
     public static final String USER_CREATED = "User created";
 
     //ClientService

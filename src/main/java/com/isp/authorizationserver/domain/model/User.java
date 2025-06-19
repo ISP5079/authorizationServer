@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -23,15 +25,19 @@ public class User {
     @Column(name = "id_user", nullable = false)
     private UUID id;
 
+    @NotNull
     @Column(name = "email", nullable = false, length = Integer.MAX_VALUE)
     private String email;
 
+    @NotNull
     @Column(name = "full_name", nullable = false, length = Integer.MAX_VALUE)
     private String fullName;
 
+    @Size(max = 25)
     @Column(name = "user_name", length = 25)
     private String userName;
 
+    @NotNull
     @Column(name = "password_hash", nullable = false, length = Integer.MAX_VALUE)
     private String passwordHash;
 
@@ -50,11 +56,16 @@ public class User {
     @Column(name = "last_login")
     private OffsetDateTime lastLogin;
 
+    @Size(max = 10)
     @Column(name = "phone", length = 10)
     private String phone;
 
     @ColumnDefault("true")
-    @Column(name = "fist_login")
-    private Boolean fistLogin;
+    @Column(name = "is_verified")
+    private Boolean isVerified;
+
+    @ColumnDefault("(now() + '120 days'::interval)")
+    @Column(name = "password_expires_at")
+    private OffsetDateTime passwordExpiresAt;
 
 }

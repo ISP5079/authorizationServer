@@ -11,6 +11,7 @@ import org.hibernate.validator.constraints.Length;
 @Setter
 public class RoleRq {
     @NotBlank
+    @Length(max = 50)
     @JsonDeserialize(using = UpperCaseDeserializer.class)
     private String name;
     @NotBlank

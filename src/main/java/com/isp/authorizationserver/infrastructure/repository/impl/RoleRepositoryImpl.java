@@ -1,11 +1,13 @@
 package com.isp.authorizationserver.infrastructure.repository.impl;
 
+import com.isp.authorizationserver.domain.exception.RoleCreateException;
+import com.isp.authorizationserver.domain.exception.RoleNotFoundException;
 import com.isp.authorizationserver.domain.model.Role;
 import com.isp.authorizationserver.domain.port.out.RoleRepository;
 import com.isp.authorizationserver.infrastructure.repository.RoleRespositoryJpa;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 @Repository
 public class RoleRepositoryImpl implements RoleRepository {
@@ -18,11 +20,17 @@ public class RoleRepositoryImpl implements RoleRepository {
 
     @Override
     public Role save(Role role) {
-        return rolesRespositoryJpa.save(role);
+        try {
+            return rolesRespositoryJpa.save(role);
+        } catch (DataAccessException e) {
+            if (e.getCause() instanceof DataIntegrityViolationException)
+                throw new RoleCreateException(RoleCreateException.ERROR_ROLE_ALREADY_EXISTS, e.getCause());
+            throw new RoleCreateException(RoleCreateException.ERROR_CREATING_ROLE, e.getCause());
+        }
     }
 
     @Override
-    public Optional<Role> findByName(String name) {
-        return rolesRespositoryJpa.findByName(name);
+    public Role findByName(String name) {
+        return rolesRespositoryJpa.findByName(name).orElseThrow(RoleNotFoundException::new);
     }
 }

@@ -15,16 +15,11 @@ public class UserRoleClient {
     @MapsId("idUser")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_user", nullable = false)
-    private com.isp.authorizationserver.domain.model.User idUser;
+    private User idUser;
 
-    @MapsId("idRole")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_role", nullable = false)
-    private Role idRole;
-
-    @MapsId("clientId")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "client_id", nullable = false, referencedColumnName = "client_id")
-    private Oauth2RegisteredClient client;
+    @JoinColumn(name = "id_role", referencedColumnName = "id_role", insertable = false, updatable = false)
+    @JoinColumn(name = "client_id", referencedColumnName = "client_id", insertable = false, updatable = false)
+    private RoleClientAllowed roleClientAllowed;
 
 }
