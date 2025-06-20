@@ -6,13 +6,13 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 public abstract class GlobalRp {
 
-    protected int status;
+    protected Integer status;
     protected String message;
 
-    protected GlobalRp(int status, String message) {
+    protected GlobalRp(Integer status, String message) {
         this.status = status;
         this.message = message;
     }

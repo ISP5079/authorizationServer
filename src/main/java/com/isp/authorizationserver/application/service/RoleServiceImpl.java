@@ -57,6 +57,10 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public RoleRp getRoleByRoleName(String roleName) {
-        return roleMapper.toRoleRpByRole(rolesRepository.findByName(roleName.toUpperCase()));
+        return roleMapper.toRoleRpByRole(
+                        rolesRepository.findByName(
+                                roleName.toUpperCase()))
+                .toBuilder().status(HttpStatus.OK.value())
+                .build();
     }
 }
