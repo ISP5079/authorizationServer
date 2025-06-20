@@ -4,9 +4,10 @@ import org.springframework.http.HttpStatus;
 
 public class RoleNotFoundException extends AuthorizationServerException {
 
-    private static final String ERROR_MESSAGE = "Role not found";
+    public static final String ROLE_NOT_FOUND = "Role not found";
+    public static final String ROLES_NOT_FOUND = "Roles not found";
 
-    public RoleNotFoundException() {
-        super(HttpStatus.NOT_FOUND, ERROR_MESSAGE);
+    public RoleNotFoundException(String message) {
+        super(HttpStatus.NOT_FOUND, message);
     }
 }

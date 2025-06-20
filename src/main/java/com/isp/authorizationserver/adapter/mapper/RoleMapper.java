@@ -10,5 +10,5 @@ public interface RoleMapper {
 
     @Mapping(target = "idRole", source = "id")
     @Mapping(target = "roleName", source = "name")
-    RoleRp toUserRp(Role role);
+    RoleRp toRoleRpByRole(Role role);
 }

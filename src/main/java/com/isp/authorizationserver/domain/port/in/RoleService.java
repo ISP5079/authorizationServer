@@ -6,5 +6,7 @@ import com.isp.authorizationserver.adapter.dto.out.RoleRp;
 public interface RoleService {
     RoleRp createRole(RoleRq roleRq);
 
+    RoleRp getRoles();
+
     RoleRp getRoleByRoleName(String roleName);
 }

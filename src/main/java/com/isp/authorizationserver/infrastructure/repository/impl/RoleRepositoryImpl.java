@@ -9,6 +9,9 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Repository
 public class RoleRepositoryImpl implements RoleRepository {
 
@@ -30,7 +33,12 @@ public class RoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
+    public Set<Role> findAll() {
+        return new HashSet<>(rolesRespositoryJpa.findAll());
+    }
+
+    @Override
     public Role findByName(String name) {
-        return rolesRespositoryJpa.findByName(name).orElseThrow(RoleNotFoundException::new);
+        return rolesRespositoryJpa.findByName(name).orElseThrow(() -> new RoleNotFoundException(RoleNotFoundException.ROLE_NOT_FOUND));
     }
 }

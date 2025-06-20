@@ -7,6 +7,7 @@ import com.isp.authorizationserver.shared.constants.Messages;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -41,6 +42,14 @@ public class GlobalError {
         return ResponseEntity
                 .status(ex.getHttpStatus())
                 .body(new ErrorRp(ex.getHttpStatus(), ex.getMessage()));
+    }
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<GlobalRp> handleAuthorizationDeniedException(AuthorizationDeniedException ex) {
+        log.error("{}: {}", ex.getClass().getSimpleName(), ex.getMessage(), ex);
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorRp(HttpStatus.UNAUTHORIZED, Messages.UNAUTHORIZED));
     }
 
     @ExceptionHandler(Exception.class)

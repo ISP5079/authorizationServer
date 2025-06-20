@@ -7,6 +7,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -20,8 +21,13 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static com.isp.authorizationserver.shared.constants.RoleAuthorization.ADMIN_AUTH_SERVER;
+import static com.isp.authorizationserver.shared.constants.RoleAuthorization.APP;
+import static com.isp.authorizationserver.shared.constants.endpoints.EndpointPaths.*;
+
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class AuthorizationServerConfig {
 
     @Bean
@@ -37,7 +43,7 @@ public class AuthorizationServerConfig {
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        grantedAuthoritiesConverter.setAuthorityPrefix("SCOPE_"); // Requiere el prefijo que usaste en .hasAuthority
+        grantedAuthoritiesConverter.setAuthorityPrefix(RoleAuthorization.SCOPE_PREFIX); // Requiere el prefijo que usaste en hasAuthority
 
         JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
         jwtConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
@@ -51,7 +57,7 @@ public class AuthorizationServerConfig {
         http
                 .securityMatcher(authorizationServerConfigurer.getEndpointsMatcher()) // SOLO para endpoints del Authorization Server
                 .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/oauth2/token"))
+                .csrf(csrf -> csrf.ignoringRequestMatchers(AUTH.getBasePath()))
                 .httpBasic(Customizer.withDefaults())
                 .with(authorizationServerConfigurer, Customizer.withDefaults());
         return http.build();
@@ -65,11 +71,18 @@ public class AuthorizationServerConfig {
                         oauth2.jwt(jwt ->
                                 jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/client").hasAuthority(RoleAuthorization.ADMIN_AUTH_SERVER.getScope())
-                        .requestMatchers(HttpMethod.POST, "/role").hasAuthority(RoleAuthorization.ADMIN_AUTH_SERVER.getScope())
-                        .requestMatchers(HttpMethod.GET, "/user/isExist").hasAuthority(RoleAuthorization.APP.getScope())
-                        .requestMatchers(HttpMethod.GET, "/user").hasAuthority(RoleAuthorization.APP.getScope())
-                        .requestMatchers(HttpMethod.POST, "/user").hasAuthority(RoleAuthorization.APP.getScope())
+                        .requestMatchers(HttpMethod.POST, CLIENT.getCreatePath())
+                        .hasAuthority(ADMIN_AUTH_SERVER.getScopeWithPrefix())
+                        .requestMatchers(HttpMethod.POST, ROLE.getCreatePath())
+                        .hasAuthority(ADMIN_AUTH_SERVER.getScopeWithPrefix())
+                        .requestMatchers(HttpMethod.GET, ROLE.getGetAllPath())
+                        .hasAuthority(ADMIN_AUTH_SERVER.getScopeWithPrefix())
+                        .requestMatchers(HttpMethod.POST, USER.getCreatePath())
+                        .hasAuthority(APP.getScopeWithPrefix())
+                        .requestMatchers(HttpMethod.GET, USER.getValidatePath())
+                        .hasAuthority(APP.getScopeWithPrefix())
+                        .requestMatchers(HttpMethod.GET, USER.getGetAllPath())
+                        .hasAuthority(APP.getScopeWithPrefix())
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable) // o ignora solo lo necesario
