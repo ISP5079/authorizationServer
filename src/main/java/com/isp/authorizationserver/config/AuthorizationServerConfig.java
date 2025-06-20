@@ -1,5 +1,6 @@
 package com.isp.authorizationserver.config;
 
+import com.isp.authorizationserver.shared.constants.EndPoints;
 import com.isp.authorizationserver.shared.constants.RoleAuthorization;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +24,6 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import static com.isp.authorizationserver.shared.constants.RoleAuthorization.ADMIN_AUTH_SERVER;
 import static com.isp.authorizationserver.shared.constants.RoleAuthorization.APP;
-import static com.isp.authorizationserver.shared.constants.endpoints.EndpointPaths.*;
 
 @Configuration
 @EnableWebSecurity
@@ -57,7 +57,7 @@ public class AuthorizationServerConfig {
         http
                 .securityMatcher(authorizationServerConfigurer.getEndpointsMatcher()) // SOLO para endpoints del Authorization Server
                 .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
-                .csrf(csrf -> csrf.ignoringRequestMatchers(AUTH.getBasePath()))
+                .csrf(csrf -> csrf.ignoringRequestMatchers(EndPoints.AUTHORIZATION_SERVER))
                 .httpBasic(Customizer.withDefaults())
                 .with(authorizationServerConfigurer, Customizer.withDefaults());
         return http.build();
@@ -71,17 +71,15 @@ public class AuthorizationServerConfig {
                         oauth2.jwt(jwt ->
                                 jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, CLIENT.getCreatePath())
+                        .requestMatchers(HttpMethod.POST, EndPoints.CLIENT)
                         .hasAuthority(ADMIN_AUTH_SERVER.getScopeWithPrefix())
-                        .requestMatchers(HttpMethod.POST, ROLE.getCreatePath())
+                        .requestMatchers(HttpMethod.POST, EndPoints.ROLE)
                         .hasAuthority(ADMIN_AUTH_SERVER.getScopeWithPrefix())
-                        .requestMatchers(HttpMethod.GET, ROLE.getGetAllPath())
+                        .requestMatchers(HttpMethod.GET, EndPoints.ROLE)
                         .hasAuthority(ADMIN_AUTH_SERVER.getScopeWithPrefix())
-                        .requestMatchers(HttpMethod.POST, USER.getCreatePath())
+                        .requestMatchers(HttpMethod.POST, EndPoints.USER)
                         .hasAuthority(APP.getScopeWithPrefix())
-                        .requestMatchers(HttpMethod.GET, USER.getValidatePath())
-                        .hasAuthority(APP.getScopeWithPrefix())
-                        .requestMatchers(HttpMethod.GET, USER.getGetAllPath())
+                        .requestMatchers(HttpMethod.GET, EndPoints.USER)
                         .hasAuthority(APP.getScopeWithPrefix())
                         .anyRequest().authenticated()
                 )

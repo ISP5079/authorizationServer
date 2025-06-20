@@ -3,7 +3,7 @@ package com.isp.authorizationserver.adapter.controller;
 import com.isp.authorizationserver.adapter.dto.in.RoleRq;
 import com.isp.authorizationserver.adapter.dto.out.RoleRp;
 import com.isp.authorizationserver.domain.port.in.RoleService;
-import com.isp.authorizationserver.shared.constants.endpoints.CompositeEndpointPaths;
+import com.isp.authorizationserver.shared.constants.EndPoints;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/role")
+@RequestMapping(EndPoints.ROLE)
 public class RoleController {
     private final RoleService roleService;
 
@@ -35,7 +35,7 @@ public class RoleController {
                     T(com.isp.authorizationserver.shared.constants.RoleAuthorization).APP.getScopeWithPrefix()
                 )
             """)
-    @GetMapping(CompositeEndpointPaths.ROLE_GET_PATH)
+    @GetMapping(EndPoints.ROLE_FIND_BY_ROLE_NAME)
     public ResponseEntity<RoleRp> getRoleByRoleName(@PathVariable String roleName) {
         return ResponseEntity.ok(roleService.getRoleByRoleName(roleName));
     }

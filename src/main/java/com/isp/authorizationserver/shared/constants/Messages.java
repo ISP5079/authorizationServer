@@ -5,6 +5,7 @@ public class Messages {
     private Messages() {}
 
     //GlobalError
+    public static final String BASE_ERROR = "{}: {}";
     public static final String VALIDATION_FAILED = "Validation failed";
     public static final String UNAUTHORIZED = "Access denied";
     public static final String UNEXPECTED_ERROR = "Unexpected error";

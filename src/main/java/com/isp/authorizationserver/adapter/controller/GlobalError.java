@@ -22,7 +22,7 @@ public class GlobalError {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<GlobalRp> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        log.error("MethodArgumentNotValidException: {}", ex.getMessage(), ex);
+        log.error(Messages.BASE_ERROR, ex.getClass().getSimpleName(), ex.getMessage(), ex);
 
         Map<String, String> errors = ex.getBindingResult()
                 .getFieldErrors().stream()
@@ -38,7 +38,7 @@ public class GlobalError {
 
     @ExceptionHandler(AuthorizationServerException.class)
     public ResponseEntity<GlobalRp> handleAuthorizationServerException (AuthorizationServerException ex) {
-        log.error("{}: {}", ex.getClass().getSimpleName(), ex.getMessage(), ex);
+        log.error(Messages.BASE_ERROR, ex.getClass().getSimpleName(), ex.getMessage(), ex);
         return ResponseEntity
                 .status(ex.getHttpStatus())
                 .body(new ErrorRp(ex.getHttpStatus(), ex.getMessage()));
@@ -46,7 +46,7 @@ public class GlobalError {
 
     @ExceptionHandler(AuthorizationDeniedException.class)
     public ResponseEntity<GlobalRp> handleAuthorizationDeniedException(AuthorizationDeniedException ex) {
-        log.error("{}: {}", ex.getClass().getSimpleName(), ex.getMessage(), ex);
+        log.error(Messages.BASE_ERROR, ex.getClass().getSimpleName(), ex.getMessage(), ex);
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(new ErrorRp(HttpStatus.UNAUTHORIZED, Messages.UNAUTHORIZED));
@@ -54,7 +54,7 @@ public class GlobalError {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<GlobalRp> handleException(Exception ex) {
-        log.error("{}: {}", ex.getClass().getSimpleName(), ex.getMessage(), ex);
+        log.error(Messages.BASE_ERROR, ex.getClass().getSimpleName(), ex.getMessage(), ex);
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorRp(HttpStatus.INTERNAL_SERVER_ERROR, Messages.UNEXPECTED_ERROR));
