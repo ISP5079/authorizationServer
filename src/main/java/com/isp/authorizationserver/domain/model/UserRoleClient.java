@@ -19,7 +19,7 @@ public class UserRoleClient {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_role", referencedColumnName = "id_role", insertable = false, updatable = false)
-    @JoinColumn(name = "client_id", referencedColumnName = "client_id", insertable = false, updatable = false)
+    @JoinColumn(name = "id_client", referencedColumnName = "id_client", insertable = false, updatable = false)
     private RoleClientAllowed roleClientAllowed;
 
 }

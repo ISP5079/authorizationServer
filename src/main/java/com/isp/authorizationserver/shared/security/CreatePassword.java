@@ -1,14 +1,15 @@
 package com.isp.authorizationserver.shared.security;
 
+import java.security.SecureRandom;
 import java.util.Base64;
-import java.util.random.RandomGenerator;
 
-public class CreatePassword {
+public final class CreatePassword {
+
+    public static final SecureRandom random = new SecureRandom();
 
     private CreatePassword() {}
 
     public static String generarContrasena() {
-        RandomGenerator random = RandomGenerator.of("SecureRandom");
         byte[] bytes = new byte[32];
         random.nextBytes(bytes);
         return Base64.getEncoder().encodeToString(bytes);

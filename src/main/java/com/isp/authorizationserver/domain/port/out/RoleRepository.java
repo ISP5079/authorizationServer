@@ -10,4 +10,6 @@ public interface RoleRepository {
     Set<Role> findAll();
 
     Role findByName(String name);
+
+    Role findById(Integer idRole);
 }

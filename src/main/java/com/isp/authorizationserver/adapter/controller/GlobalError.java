@@ -9,10 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -24,12 +26,17 @@ public class GlobalError {
     public ResponseEntity<GlobalRp> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         log.error(Messages.BASE_ERROR, ex.getClass().getSimpleName(), ex.getMessage(), ex);
 
-        Map<String, String> errors = ex.getBindingResult()
+        Map<String, String> errors = new LinkedHashMap<>();
+
+        errors.putAll(ex.getBindingResult()
                 .getFieldErrors().stream()
                 .filter(fieldError -> fieldError.getDefaultMessage() != null)
-                .collect(Collectors.toMap(
-                        FieldError::getField,
-                        FieldError::getDefaultMessage));
+                .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage)));
+
+        errors.putAll(ex.getBindingResult()
+                .getGlobalErrors().stream()
+                .filter(globalError -> globalError.getDefaultMessage() != null)
+                .collect(Collectors.toMap(or -> Messages.TYPE_ERROR_GLOBAL_REQUIRED_FIELDS, ObjectError::getDefaultMessage)));
 
         return ResponseEntity
                 .badRequest()

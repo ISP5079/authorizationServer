@@ -64,6 +64,8 @@ CREATE TABLE oauth2_authorization_consent
 );
 
 ALTER TABLE oauth2_registered_client
+    ADD CONSTRAINT uq_oauth2_registered_client_id UNIQUE (id);
+ALTER TABLE oauth2_registered_client
     ADD CONSTRAINT uq_oauth2_registered_client_id_client UNIQUE (client_id);
 
 CREATE TABLE roles
@@ -94,19 +96,19 @@ CREATE INDEX idx_users_username ON users (user_name);
 CREATE TABLE role_client_allowed
 (
     id_role   integer NOT NULL references roles (id_role),
-    client_id varchar NOT NULL references oauth2_registered_client (client_id),
-    PRIMARY KEY (id_role, client_id)
+    id_client varchar NOT NULL references oauth2_registered_client (id),
+    PRIMARY KEY (id_role, id_client)
 );
-CREATE INDEX idx_role_client_allowed_clientId ON role_client_allowed (client_id);
+CREATE INDEX idx_role_client_allowed_clientId ON role_client_allowed (id_client);
 
 CREATE TABLE user_role_client
 (
     id_user   uuid    NOT NULL references users (id_user),
     id_role   integer NOT NULL,
-    client_id varchar NOT NULL,
-    PRIMARY KEY (id_user, id_role, client_id),
-    FOREIGN KEY (id_role, client_id) references role_client_allowed (id_role, client_id)
+    id_client varchar NOT NULL,
+    PRIMARY KEY (id_user, id_role, id_client),
+    FOREIGN KEY (id_role, id_client) references role_client_allowed (id_role, id_client)
 );
 CREATE INDEX idx_user_role_client_user ON user_role_client (id_user);
-CREATE INDEX idx_user_role_client_client ON user_role_client (client_id);
+CREATE INDEX idx_user_role_client_client ON user_role_client (id_client);
 

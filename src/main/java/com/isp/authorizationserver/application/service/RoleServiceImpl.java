@@ -1,6 +1,6 @@
 package com.isp.authorizationserver.application.service;
 
-import com.isp.authorizationserver.adapter.dto.in.RoleRq;
+import com.isp.authorizationserver.adapter.dto.in.role.CreateRoleRq;
 import com.isp.authorizationserver.adapter.dto.out.RoleRp;
 import com.isp.authorizationserver.adapter.mapper.RoleMapper;
 import com.isp.authorizationserver.domain.exception.RoleNotFoundException;
@@ -28,7 +28,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public RoleRp createRole(RoleRq roleRq) {
+    public RoleRp createRole(CreateRoleRq roleRq) {
         rolesRepository.save(
                 Role.builder()
                         .name(roleRq.getName())

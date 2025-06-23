@@ -41,4 +41,9 @@ public class RoleRepositoryImpl implements RoleRepository {
     public Role findByName(String name) {
         return rolesRespositoryJpa.findByName(name).orElseThrow(() -> new RoleNotFoundException(RoleNotFoundException.ROLE_NOT_FOUND));
     }
+
+    @Override
+    public Role findById(Integer idRole) {
+        return rolesRespositoryJpa.findById(idRole).orElseThrow(() -> new RoleNotFoundException(RoleNotFoundException.ROLE_NOT_FOUND));
+    }
 }

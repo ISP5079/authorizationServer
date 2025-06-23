@@ -27,8 +27,8 @@ public class UserRoleClientId implements java.io.Serializable {
     private Integer idRole;
 
     @NotNull
-    @Column(name = "client_id", nullable = false, length = Integer.MAX_VALUE)
-    private String clientId;
+    @Column(name = "id_client", nullable = false, length = Integer.MAX_VALUE)
+    private String idClient;
 
     @Override
     public boolean equals(Object o) {
@@ -36,13 +36,13 @@ public class UserRoleClientId implements java.io.Serializable {
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         UserRoleClientId entity = (UserRoleClientId) o;
         return Objects.equals(this.idUser, entity.idUser) &&
-                Objects.equals(this.clientId, entity.clientId) &&
+                Objects.equals(this.idClient, entity.idClient) &&
                 Objects.equals(this.idRole, entity.idRole);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idUser, clientId, idRole);
+        return Objects.hash(idUser, idClient, idRole);
     }
 
 }

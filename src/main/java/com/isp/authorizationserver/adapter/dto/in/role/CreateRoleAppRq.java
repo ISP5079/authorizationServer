@@ -1,20 +1,19 @@
-package com.isp.authorizationserver.adapter.dto.in;
+package com.isp.authorizationserver.adapter.dto.in.role;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.isp.authorizationserver.shared.annotation.AtLeastOneNotNull;
 import com.isp.authorizationserver.shared.deserializer.UpperCaseDeserializer;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 
 @Getter
 @Setter
-public class RoleRq {
-    @NotBlank
-    @Length(max = 50)
+@AtLeastOneNotNull(field1 = "idRole", field2 = "roleName")
+public class CreateRoleAppRq {
+    private Integer idRole;
     @JsonDeserialize(using = UpperCaseDeserializer.class)
-    private String name;
+    private String roleName;
     @NotBlank
-    @Length(max = 100)
-    private String description;
+    private String appName;
 }

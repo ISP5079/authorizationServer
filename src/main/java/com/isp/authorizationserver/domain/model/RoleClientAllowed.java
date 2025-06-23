@@ -1,13 +1,15 @@
 package com.isp.authorizationserver.domain.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "role_client_allowed")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class RoleClientAllowed {
     @EmbeddedId
     private RoleClientAllowedId id;
@@ -17,9 +19,9 @@ public class RoleClientAllowed {
     @JoinColumn(name = "id_role", nullable = false)
     private Role idRole;
 
-    @MapsId("clientId")
+    @MapsId("idClient")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "client_id", nullable = false, referencedColumnName = "client_id")
+    @JoinColumn(name = "id_client", nullable = false)
     private Oauth2RegisteredClient client;
 
 }

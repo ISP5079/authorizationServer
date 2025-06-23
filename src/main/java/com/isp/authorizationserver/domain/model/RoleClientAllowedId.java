@@ -3,8 +3,7 @@ package com.isp.authorizationserver.domain.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.Hibernate;
 
 import java.io.Serial;
@@ -13,6 +12,9 @@ import java.util.Objects;
 @Getter
 @Setter
 @Embeddable
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RoleClientAllowedId implements java.io.Serializable {
     @Serial
     private static final long serialVersionUID = 1303077066621686939L;
@@ -22,21 +24,21 @@ public class RoleClientAllowedId implements java.io.Serializable {
     private Integer idRole;
 
     @NotNull
-    @Column(name = "client_id", nullable = false, length = 100)
-    private String clientId;
+    @Column(name = "id_client", nullable = false, length = 100)
+    private String idClient;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         RoleClientAllowedId entity = (RoleClientAllowedId) o;
-        return Objects.equals(this.clientId, entity.clientId) &&
+        return Objects.equals(this.idClient, entity.idClient) &&
                 Objects.equals(this.idRole, entity.idRole);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(clientId, idRole);
+        return Objects.hash(idClient, idRole);
     }
 
 }
