@@ -22,6 +22,6 @@ public class RoleClientAllowed {
     @MapsId("idClient")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_client", nullable = false)
-    private Oauth2RegisteredClient client;
+    private Oauth2RegisteredClient idClient;
 
 }

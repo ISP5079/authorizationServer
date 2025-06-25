@@ -10,6 +10,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -38,8 +40,8 @@ public class RoleController {
                     T(com.isp.authorizationserver.shared.constants.RoleAuthorization).ADMIN_AUTH_SERVER.getScopeWithPrefix()
                 )
             """)
-    @GetMapping(EndPoints.ROLE_FIND_BY_ROLE_NAME)
-    public ResponseEntity<RoleRp> getRoleByRoleName(@PathVariable String roleName) {
+    @GetMapping("/{roleName}")
+    public ResponseEntity<RoleRp> getRoleByRoleName(@PathVariable("roleName") String roleName) {
         return ResponseEntity.ok(roleService.getRoleByRoleName(roleName));
     }
 
@@ -53,14 +55,19 @@ public class RoleController {
         return ResponseEntity.status(HttpStatus.CREATED).body(roleAppService.createRoleApp(createRoleAppRq));
     }
 
+    @PreAuthorize("""
+            hasAnyAuthority(T(com.isp.authorizationserver.shared.constants.RoleAuthorization).ADMIN_AUTH_SERVER.getScopeWithPrefix())
+            """)
+    @GetMapping(EndPoints.ROLE_APP + "/{appName}")
+    public ResponseEntity<RoleRp> getRoleByApp(@PathVariable String appName) {
+        return ResponseEntity.ok().body(roleAppService.findRoleAppByApp(appName));
+    }
+
+    @PreAuthorize("""
+            hasAnyAuthority(T(com.isp.authorizationserver.shared.constants.RoleAuthorization).APP.getScopeWithPrefix())
+            """)
     @GetMapping(EndPoints.ROLE_APP)
-    public ResponseEntity<RoleRp> getRoleForApp() {
-        return null;
+    public ResponseEntity<RoleRp> getRoleForApp(@AuthenticationPrincipal Jwt jwt) {
+        return ResponseEntity.ok().body(roleAppService.findRoleAppByApp(jwt));
     }
-
-    public ResponseEntity<RoleRp> getRoleByApp() {
-        return null;
-    }
-
-
 }

@@ -36,7 +36,7 @@ public class GlobalError {
         errors.putAll(ex.getBindingResult()
                 .getGlobalErrors().stream()
                 .filter(globalError -> globalError.getDefaultMessage() != null)
-                .collect(Collectors.toMap(or -> Messages.TYPE_ERROR_GLOBAL_REQUIRED_FIELDS, ObjectError::getDefaultMessage)));
+                .collect(Collectors.toMap(ignored -> Messages.TYPE_ERROR_GLOBAL_REQUIRED_FIELDS, ObjectError::getDefaultMessage)));
 
         return ResponseEntity
                 .badRequest()

@@ -12,5 +12,6 @@ import java.util.Set;
 public class RoleRp extends GlobalRp{
     private Integer idRole;
     private String roleName;
+    private String app;
     private Set<RoleRp> roles;
 }

@@ -9,7 +9,6 @@ public class EndPoints {
 
     public static final String ROLE = "/role";
     public static final String ROLE_APP = "/app";
-    public static final String ROLE_FIND_BY_ROLE_NAME = "/{roleName}";
 
     public static final String USER = "/user";
     public static final String USER_IS_EXIST = "/isExist";
