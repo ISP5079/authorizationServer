@@ -10,4 +10,6 @@ import org.mapstruct.Mapping;
 public interface UserMapper {
     @Mapping(target = "idUser", source = "id")
     UserRp toUserRpByUser(User user);
+
+    User toUserByCreateUserRq(CreateUserRq userRq);
 }
