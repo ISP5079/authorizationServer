@@ -21,16 +21,12 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority(T(com.isp.authorizationserver.shared.constants.RoleAuthorization).APP.getScopeWithPrefix())")
-    @GetMapping(EndPoints.USER_IS_EXIST)
-    public ResponseEntity<UserRp> isUserExist(@Valid @RequestBody FindUserRq isExistUserRq) {
-        return ResponseEntity.ok().body(userService.isUserExist(isExistUserRq));
-    }
-
     @GetMapping()
     public ResponseEntity<UserRp> getUserInfo(@Valid @RequestBody FindUserRq findUserRq) {
         return ResponseEntity.ok().body(userService.getUser(findUserRq));
     }
 
+    @PreAuthorize("hasAuthority(T(com.isp.authorizationserver.shared.constants.RoleAuthorization).APP.getScopeWithPrefix())")
     @PostMapping
     public ResponseEntity<UserRp> createUser(@Valid @RequestBody CreateUserRq userRq) {
         return ResponseEntity.ok().body(userService.createUser(userRq));

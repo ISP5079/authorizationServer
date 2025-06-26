@@ -11,7 +11,6 @@ public class EndPoints {
     public static final String ROLE_APP = "/app";
 
     public static final String USER = "/user";
-    public static final String USER_IS_EXIST = "/isExist";
     private EndPoints() {
     }
 }

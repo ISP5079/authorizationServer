@@ -1,5 +1,6 @@
 package com.isp.authorizationserver.adapter.dto.in.user;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FindUserRq {
-    private String username;
-    private String email;
+    @NotBlank
+    private String emailOrUsername;
 }

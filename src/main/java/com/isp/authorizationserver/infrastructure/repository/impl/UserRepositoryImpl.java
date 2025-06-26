@@ -1,11 +1,13 @@
 package com.isp.authorizationserver.infrastructure.repository.impl;
 
+import com.isp.authorizationserver.domain.exception.UserCreateException;
+import com.isp.authorizationserver.domain.exception.UserNotFoundException;
 import com.isp.authorizationserver.domain.model.User;
 import com.isp.authorizationserver.domain.port.out.UserRepository;
 import com.isp.authorizationserver.infrastructure.repository.UserRepositoryJpa;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -17,22 +19,16 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public boolean existsByEmail(String email) {
-        return userRepositoryJpa.existsByEmail(email);
-    }
-
-    @Override
-    public boolean existsByUsername(String username) {
-        return userRepositoryJpa.existsByUserName(username);
-    }
-
-    @Override
-    public Optional<User> findByEmailOrUsername(String email, String username) {
-        return userRepositoryJpa.findByEmailOrUserName(email, username);
+    public User findByEmailOrUsername(String emailOrUserName) {
+        return userRepositoryJpa.findByEmailOrUserName(emailOrUserName, emailOrUserName).orElseThrow(UserNotFoundException::new);
     }
 
     @Override
     public User save(User user) {
-        return userRepositoryJpa.save(user);
+        try {
+            return userRepositoryJpa.save(user);
+        } catch (DataIntegrityViolationException ex) {
+            throw new UserCreateException(HttpStatus.CONFLICT, ex.getCause());
+        }
     }
 }
