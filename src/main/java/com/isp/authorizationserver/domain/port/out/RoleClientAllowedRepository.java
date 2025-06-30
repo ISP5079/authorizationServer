@@ -10,4 +10,6 @@ public interface RoleClientAllowedRepository {
     Set<RoleClientAllowed> findAllRoleApp();
 
     Set<RoleClientAllowed> findRoleAppByApp(String appName);
+
+    RoleClientAllowed findRoleAppByAppAndRole(String appName, String roleName);
 }

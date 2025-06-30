@@ -9,6 +9,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
+import java.util.UUID;
+
 @Repository
 public class UserRepositoryImpl implements UserRepository {
 
@@ -21,6 +23,11 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User findByEmailOrUsername(String emailOrUserName) {
         return userRepositoryJpa.findByEmailOrUserName(emailOrUserName, emailOrUserName).orElseThrow(UserNotFoundException::new);
+    }
+
+    @Override
+    public User findById(UUID uuid) {
+        return userRepositoryJpa.findById(uuid).orElseThrow(UserNotFoundException::new);
     }
 
     @Override

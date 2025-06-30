@@ -3,7 +3,7 @@ package com.isp.authorizationserver.adapter.controller;
 import com.isp.authorizationserver.adapter.dto.in.role.CreateRoleAppRq;
 import com.isp.authorizationserver.adapter.dto.in.role.CreateRoleRq;
 import com.isp.authorizationserver.adapter.dto.out.RoleRp;
-import com.isp.authorizationserver.domain.port.in.RoleAppService;
+import com.isp.authorizationserver.domain.port.in.RoleClientService;
 import com.isp.authorizationserver.domain.port.in.RoleService;
 import com.isp.authorizationserver.shared.constants.EndPoints;
 import jakarta.validation.Valid;
@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(EndPoints.ROLE)
 public class RoleController {
     private final RoleService roleService;
-    private final RoleAppService roleAppService;
+    private final RoleClientService roleAppService;
 
-    public RoleController(RoleService roleService, RoleAppService roleAppService) {
+    public RoleController(RoleService roleService, RoleClientService roleAppService) {
         this.roleService = roleService;
         this.roleAppService = roleAppService;
     }

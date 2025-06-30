@@ -1,5 +1,7 @@
 package com.isp.authorizationserver.config;
 
+import com.isp.authorizationserver.config.security.ClientIdCaptureFilter;
+import com.isp.authorizationserver.config.security.CustomUserDetailsService;
 import com.isp.authorizationserver.shared.constants.EndPoints;
 import com.isp.authorizationserver.shared.constants.RoleAuthorization;
 import org.springframework.context.annotation.Bean;
@@ -12,9 +14,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.authorization.client.JdbcRegisteredClientRepository;
@@ -23,8 +22,8 @@ import org.springframework.security.oauth2.server.authorization.config.annotatio
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static com.isp.authorizationserver.shared.constants.RoleAuthorization.ADMIN_AUTH_SERVER;
 import static com.isp.authorizationserver.shared.constants.RoleAuthorization.APP;
@@ -33,6 +32,12 @@ import static com.isp.authorizationserver.shared.constants.RoleAuthorization.APP
 @EnableWebSecurity
 @EnableMethodSecurity
 public class AuthorizationServerConfig {
+
+    private final CustomUserDetailsService customUserDetailsService;
+
+    public AuthorizationServerConfig(CustomUserDetailsService customUserDetailsService) {
+        this.customUserDetailsService = customUserDetailsService;
+    }
 
     @Bean
     public RegisteredClientRepository registeredClientRepository(JdbcTemplate jdbcTemplate) {
@@ -61,28 +66,19 @@ public class AuthorizationServerConfig {
         http
                 .securityMatcher(authorizationServerConfigurer.getEndpointsMatcher()) // SOLO para endpoints del Authorization Server
                 .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
-                .csrf(csrf -> csrf.ignoringRequestMatchers(EndPoints.AUTHORIZATION_SERVER))
-                .httpBasic(Customizer.withDefaults())
-                .formLogin(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable) // Desactiva CSRF para permitir peticiones como POST /oauth2/token sin necesidad de token CSRF
+                .httpBasic(Customizer.withDefaults()) // Requiere autenticación Basic para /oauth2/token (usado por client_id + client_secret)
+                .formLogin(AbstractHttpConfigurer::disable) // Desactiva el formulario de login (aquí no se usa login con vista)
+                .addFilterBefore(new ClientIdCaptureFilter(), UsernamePasswordAuthenticationFilter.class)
                 .with(authorizationServerConfigurer, Customizer.withDefaults());
         return http.build();
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails user = User
-                .withUsername("usuario1")
-                .password(passwordEncoder().encode("1234"))
-                .roles("USER")
-                .build();
-
-        return new InMemoryUserDetailsManager(user);
-    }
-
-    @Bean
     @Order(2)
-    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain endPointsSecurityFilterChain(HttpSecurity http) throws Exception {
         http
+                .securityMatcher("/api/**")
                 .oauth2ResourceServer(oauth2 ->
                         oauth2.jwt(jwt ->
                                 jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))
@@ -99,8 +95,25 @@ public class AuthorizationServerConfig {
                         .hasAuthority(APP.getScopeWithPrefix())
                         .anyRequest().authenticated()
                 )
-                .csrf(AbstractHttpConfigurer::disable) // o ignora solo lo necesario
+                .csrf(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable);
+        return http.build();
+    }
+
+    @Bean
+    @Order(3)
+    public SecurityFilterChain viewsSecurityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/login").permitAll()
+                        .anyRequest().authenticated())
+                .csrf(Customizer.withDefaults())
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .formLogin(form ->
+                        form.loginPage("/login").permitAll())
+                .addFilterBefore(new ClientIdCaptureFilter(), UsernamePasswordAuthenticationFilter.class)
+                .userDetailsService(customUserDetailsService);
         return http.build();
     }
 

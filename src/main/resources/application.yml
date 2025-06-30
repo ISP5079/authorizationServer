@@ -8,6 +8,11 @@ spring:
     password: copwor-vaxdo5-megMub
   jackson:
     default-property-inclusion: non_null
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    cache: false
 server:
   port: 9000
 logging:

@@ -4,7 +4,7 @@ import com.isp.authorizationserver.adapter.dto.in.role.CreateRoleAppRq;
 import com.isp.authorizationserver.adapter.dto.out.RoleRp;
 import org.springframework.security.oauth2.jwt.Jwt;
 
-public interface RoleAppService {
+public interface RoleClientService {
     RoleRp createRoleApp(CreateRoleAppRq createRoleApp);
 
     RoleRp findRoleAppByApp(String appName);

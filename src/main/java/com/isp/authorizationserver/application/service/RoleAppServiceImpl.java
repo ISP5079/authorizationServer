@@ -8,7 +8,7 @@ import com.isp.authorizationserver.domain.model.Oauth2RegisteredClient;
 import com.isp.authorizationserver.domain.model.Role;
 import com.isp.authorizationserver.domain.model.RoleClientAllowed;
 import com.isp.authorizationserver.domain.model.RoleClientAllowedId;
-import com.isp.authorizationserver.domain.port.in.RoleAppService;
+import com.isp.authorizationserver.domain.port.in.RoleClientService;
 import com.isp.authorizationserver.domain.port.out.Oauth2RegisteredClientRepository;
 import com.isp.authorizationserver.domain.port.out.RoleClientAllowedRepository;
 import com.isp.authorizationserver.domain.port.out.RoleRepository;
@@ -20,7 +20,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class RoleAppServiceImpl implements RoleAppService {
+public class RoleAppServiceImpl implements RoleClientService {
 
     private static final String GET_ALL_ROLES = "all";
     private static final String JWT_SUBJECT_CLIENT_ID = "sub";

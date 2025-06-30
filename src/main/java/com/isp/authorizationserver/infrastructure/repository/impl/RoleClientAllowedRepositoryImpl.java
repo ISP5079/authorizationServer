@@ -42,4 +42,9 @@ public class RoleClientAllowedRepositoryImpl implements RoleClientAllowedReposit
                 .filter(set -> !set.isEmpty())
                 .orElseThrow(() -> new RoleNotFoundException(RoleNotFoundException.ROLES_NOT_FOUND));
     }
+
+    @Override
+    public RoleClientAllowed findRoleAppByAppAndRole(String appName, String roleName) {
+        return roleClientAllowedRepositoryJpa.findFisrtByIdClient_ClientIdAndIdRole_Name(appName, roleName).orElseThrow(() -> new RoleNotFoundException(RoleNotFoundException.ROLE_NOT_FOUND));
+    }
 }

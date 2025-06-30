@@ -3,8 +3,7 @@ package com.isp.authorizationserver.domain.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.Hibernate;
 
 import java.io.Serial;
@@ -14,6 +13,9 @@ import java.util.UUID;
 @Getter
 @Setter
 @Embeddable
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserRoleClientId implements java.io.Serializable {
     @Serial
     private static final long serialVersionUID = 835472690731398071L;

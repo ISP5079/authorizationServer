@@ -1,6 +1,7 @@
 package com.isp.authorizationserver.adapter.dto.in.user;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,13 +9,18 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
 @Builder(toBuilder = true)
 public class CreateUserRq {
+    private UUID idUser;
+    @NotBlank
+    private String appName;
+    @NotNull
     @Size(min = 1)
-    private List<Integer> roles;
+    private List<String> roles;
     @NotBlank
     @Length(max = 25)
     private String userName;
