@@ -110,8 +110,7 @@ public class AuthorizationServerConfig {
                         .anyRequest().authenticated())
                 .csrf(Customizer.withDefaults())
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .formLogin(form ->
-                        form.loginPage("/login").permitAll())
+                .formLogin(Customizer.withDefaults())
                 .addFilterBefore(new ClientIdCaptureFilter(), UsernamePasswordAuthenticationFilter.class)
                 .userDetailsService(customUserDetailsService);
         return http.build();
